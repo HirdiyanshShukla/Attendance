@@ -18,8 +18,7 @@ COPY . .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# Build Tailwind CSS via npm (inside django-tailwind app)
-WORKDIR /app/theme  # 🔁 Replace "theme" if your tailwind app has a different name
+WORKDIR /app/theme/static_src
 RUN npm install
 RUN npm run build
 
