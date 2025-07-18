@@ -1,0 +1,83 @@
+{% load static tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Page</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen p-6 overflow-hidden">
+    <div class="max-w-4xl mx-auto space-y-6 max-h-screen overflow-hidden">
+
+        <!-- Global Error -->
+        {% if error %}
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                <strong class="font-bold">❌ Error:</strong>
+                <span class="block sm:inline">{{ error }}</span>
+            </div>
+        {% endif %}
+
+        <!-- Name + Attendance Summary -->
+        {% if name and total_attendance %}
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                <h2 class="text-xl font-semibold">✅ Welcome, {{ name }}</h2>
+                <p class="mt-1">Overall Attendance: <strong>{{ total_attendance }}</strong></p>
+            </div>
+        {% endif %}
+
+        <!-- Subject Errors -->
+        {% if subject_errors %}
+            <div class="bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-3 rounded">
+                <h3 class="font-semibold mb-2">⚠️ Some subjects couldn't be fetched:</h3>
+                <ul class="list-disc pl-5 space-y-1 text-sm">
+                    {% for err in subject_errors %}
+                        <li>{{ err }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- Attendance Table -->
+        {% if subjects %}
+            <div class="bg-white shadow rounded-lg overflow-hidden max-h-[400px]">
+                <div class="overflow-y-auto max-h-[350px]">
+                    <table class="min-w-full text-sm text-left">
+                        <thead class="bg-gray-200 sticky top-0 z-10">
+                            <tr>
+                                <th class="px-4 py-2">Subject</th>
+                                <th class="px-4 py-2">Class Type</th>
+                                <th class="px-4 py-2">Last Date</th>
+                                <th class="px-4 py-2">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            {% for key, value in subjects.items %}
+                                <tr>
+                                    <td class="px-4 py-2 font-medium">{{ key }}</td>
+                                    <td class="px-4 py-2">{{ value.class_type }}</td>
+                                    <td class="px-4 py-2">{{ value.date }}</td>
+                                    <td class="px-4 py-2">
+                                        {% if value.present == 'Present' %}
+                                            <span class="text-green-600 font-semibold">Present</span>
+                                        {% elif value.present == 'Absent' %}
+                                            <span class="text-red-600 font-semibold">Absent</span>
+                                        {% else %}
+                                            <span class="text-gray-500">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% else %}
+            {% if not error %}
+                <div class="text-center text-gray-500">No attendance data available.</div>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>
