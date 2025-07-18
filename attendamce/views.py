@@ -12,6 +12,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
+def mainPage(request):
+    return render(request, 'attendamce/mainhome.html')
+
+
 def home(request):
     context = {}
 
